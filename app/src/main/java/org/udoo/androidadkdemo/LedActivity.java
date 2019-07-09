@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -46,14 +47,23 @@ public class LedActivity extends AppCompatActivity {
         checkAccessory();
 
         Switch onOffSwitch = (Switch) findViewById(R.id.ledSwitch);
-        onOffSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        onOffSwitch.setOnClickListener(new CompoundButton.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // writeSerial() allows you to write a single char or a String object.
-                    mAdkManager.write("1");
-                } else {
-                    mAdkManager.write("0");
+            public void onClick(View view) {
+                try
+                {
+                    view.clearFocus();
+                    while (true)
+                    {
+                        mAdkManager.write("0");
+                        Thread.sleep(4096);
+                        mAdkManager.write("1");
+                        Thread.sleep(1024);
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
                 }
             }
         });
